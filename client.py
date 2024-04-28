@@ -1,14 +1,23 @@
 import xmlrpc.client
-import sys
 
-if len(sys.argv) != 3:
-    print("Informe os parâmetros corretamente!")
-    sys.exit(1)
+# Conecta-se ao servidor RPC
+BlackJack = xmlrpc.client.ServerProxy("http://localhost:8000")
 
-num1 = int(sys.argv[1])
-num2 = int(sys.argv[2])
+# Inicia o jogo
+BlackJack.start_dig()
+BlackJack.start_dealer_hand()
 
-server = xmlrpc.client.ServerProxy("http://localhost:8000")
-result = server.add(num1, num2)
+choose = " "
 
-print(result)
+while choose.upper() != "STAND":
+    choose = input("Choose a option HIT or STAND: ")
+
+    while choose.upper() not in ["HIT", "STAND"]:
+        if choose.upper() == "HIT":
+            BlackJack.client_throw_card()
+
+    print("Suas cartas atuais:", BlackJack.get_client_hand())
+    print("Soma atual de cartas:", BlackJack.client_hand_sum())
+
+print(BlackJack.get_feed())
+print(BlackJack.get_winner())
