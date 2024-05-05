@@ -1,4 +1,4 @@
-from jsonrpclib.SimpleJSONRPCServer import SimpleJSONRPCServer
+import xmlrpc.server
 
 class Quiz:
     def __init__(self):
@@ -54,6 +54,6 @@ class Quiz:
     def get_total_points(self):
         return self.total_points
 
-server = SimpleJSONRPCServer(('localhost', 8000))
+server = xmlrpc.server.SimpleXMLRPCServer(("localhost", 8000), allow_none=True)
 server.register_instance(Quiz())
 server.serve_forever()
