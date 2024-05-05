@@ -39,21 +39,26 @@ class Quiz:
         self.total_points = 0
 
     def get_list(self):
-        if self.questions:
-            return self.questions
+        if not self.questions:
+            return []  # Retornar uma lista vazia quando não há mais perguntas
         else:
-            return "finished"
+            return self.questions
 
     def check_answer(self, question_text, answer):
-        for question in self.questions:
+        for idx, question in enumerate(self.questions):
             if question["question_text"] == question_text:
-                if question["correct_option"] == answer:
-                    self.total_points += 1
-                self.answered_questions.append(question)
+                if question not in self.answered_questions:
+                    if question["correct_option"] == answer:
+                        self.total_points += 1
+                    self.answered_questions.append(question)  # Adicionar à lista de perguntas respondidas
+                    del self.questions[idx]  # Remover a pergunta da lista de perguntas ativas
                 return
 
     def get_total_points(self):
         return self.total_points
+
+    def get_answered_questions(self):
+        return self.answered_questions
 
 server = xmlrpc.server.SimpleXMLRPCServer(("localhost", 8000), allow_none=True)
 server.register_instance(Quiz())
