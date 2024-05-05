@@ -39,8 +39,10 @@ class Quiz:
         self.total_points = 0
 
     def get_list(self):
-        # Retorna apenas as questões que não foram respondidas ainda
-        return [q for q in self.questions if q not in self.answered_questions]
+        if self.questions:
+            return self.questions
+        else:
+            return "finished"
 
     def check_answer(self, question_text, answer):
         for question in self.questions:
