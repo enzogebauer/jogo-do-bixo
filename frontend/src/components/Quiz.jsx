@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 export const Quiz = () => {
-  const [question, setQuestion] = useState('Qual é a capital do Brasil?');
+  const [questions, setQuestions] = useState('Qual é a capital do Brasil?');
   const [answers, setAnswers] = useState([
     'Rio de Janeiro',
     'São Paulo',
@@ -11,9 +11,26 @@ export const Quiz = () => {
   ]);
   const [selectedAnswer, setSelectedAnswer] = useState('');
 
-  const handleAnswerClick = (answer) => {
-    setSelectedAnswer(answer);
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch('http://localhost:8000', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          method: 'get_list',
+          params: [],
+          id: 1,
+        }),
+      });
+      const data = await response.json();
+      setQuestions(data.result);
+    } catch (error) {
+      console.error("Erro ao buscar perguntas:", error);
+    }
   };
+
 
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white shadow-md rounded-md">
